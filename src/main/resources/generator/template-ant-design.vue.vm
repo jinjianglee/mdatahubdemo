@@ -1,0 +1,172 @@
+<template>
+    <div>
+        <div style="width: 100%;margin:0 0 20px 0;" align="center">
+            <a-button type="primary" v-on:click="open${entity}Edit()">新增</a-button>
+            <a-input  style="width: 35%;" v-model="queryParam[PK]"></a-input>
+            <a-button type="default" v-on:click="getList()">查询</a-button>
+        </div>
+        <a-table :rowKey="PK" :columns="tableRow.filter(columns=>!columns.tableHidden)" :dataSource="tableData.records" :scroll="{ x: 1500 }" bordered
+                 :pagination="{pageSize:page.pageSize,total:tableData.total,showSizeChanger:true,showQuickJumper:true}"
+                 @change="pageChange">
+            <div slot="action" slot-scope="rowData">
+                <a v-on:click="open${entity}Edit(rowData)">修改</a>
+                <a v-on:click="delete${entity}(rowData[PK])"> 删除</a>
+            </div>
+        </a-table>
+        <a-modal :visible="editDialogVisible" :maskClosable="false" :title='editTitle' okText='提交'
+                 @ok="submitForm"
+                 cancelText="取消" @cancel="close${entity}Edit">
+            <a-form layout='horizontal' :form="edit${entity}Form">
+                <div v-bind:key="prop.dataIndex" v-for="prop in tableRow">
+                    <a-form-item :label="prop.title" :hidden="prop.editHidden" :label-col="{ span: 6 }" :wrapper-col="{ span: 15 }">
+                        <a-input v-decorator="[prop.dataIndex,prop.options]"/>
+                    </a-form-item>
+                </div>
+            </a-form>
+        </a-modal>
+    </div>
+</template>
+<script>
+    import axios from 'axios';
+    import _ from 'lodash-es';
+
+    export default {
+        beforeCreate() {
+            this.edit${entity}Form = this.$form.createForm(this);
+        },
+        props: [],
+        data() {
+            return {
+                editTitle:"编辑",
+                isInsert: false,
+                editDialogVisible: false,
+                queryParam: {},
+                PK:#foreach($field in ${table.fields}) #if(${field.keyFlag})"${field.propertyName}",#end#end
+                tableRow: [
+                    #foreach($field in ${table.fields})
+                        {title: "#if("$!field.comment" != "")${field.comment}#else${field.propertyName}#end",tableHidden:false,editHidden:false,dataIndex:"${field.propertyName}",scopedSlots: {customRender: "${field.propertyName}"}, options:{validateTrigger: 'blur',rules: []}},
+                    #end
+                    {title: 'Action',key: 'operation',fixed: 'right',width: 150, editHidden:true, scopedSlots: {customRender: 'action'}}
+                ],
+                tableData: {total:0},
+                page:{current:1,pageSize:10},
+                host:"http://localhost:9092",
+                api: {
+                    getList: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/get${entity}",
+                    delete: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/delete${entity}",
+                    update: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/update${entity}",
+                    insert: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/insert${entity}",
+                }
+            }
+
+        },
+        mounted() {
+            this.getList();
+        },
+        methods: {
+            pageChange(page) {
+                this.page = page;
+                this.getList();
+            },
+            getList(){
+                let param = {};
+                for (var key in this.queryParam) {
+                    if (_.isEmpty(this.queryParam[key])) {
+                        this.queryParam = {};
+                        break;
+                    }
+                    param[key.replace(/([A-Z])/g, "_$1").toUpperCase()] = this.queryParam[key];
+                }
+
+                axios.post(this.host + this.api.getList + "?current=" + this.page.current + "&size=" + this.page.pageSize, param).then(result => {
+                    this.tableData = result.data.result;
+                });
+            },
+            insert${entity}(param){
+                axios.post(this.host + this.api.insert,param).then(result => {
+                    if(result.data.errCode=="0"){
+                        this.$notification['success']({
+                            message: "新增成功"
+                        });
+                        this.close${entity}Edit();
+                        this.getList();
+                    }else{
+                        this.$notification['error']({
+                            message: result.data.meg
+                        });
+                    }
+                });
+            },
+            update${entity}(param){
+                axios.post(this.host + this.api.update,param).then(result => {
+                    if (result.data.result) {
+                        this.$notification['success']({
+                            message: "修改成功"
+                        });
+                        this.close${entity}Edit();
+                        this.getList();
+                        return;
+                    }
+                    this.$notification['error']({
+                        message: result.data.meg
+                    });
+                });
+            },
+            delete${entity}(param){
+                let dom = this;
+                this.$confirm({
+                    title: '确定要删除该条目吗?',
+                    content: '此操作不可恢复，请确认执行!',
+                    onOk() {
+                        axios.get(dom.host + dom.api.delete + "?id=" + param).then(result => {
+                            dom.$notification['success']({
+                                message: "删除成功"
+                            });
+                            dom.getList();
+                        })
+                    },
+                    onCancel() {
+                    },
+                });
+            },
+            open${entity}Edit(initParam) {
+                this.editDialogVisible = true;
+                if (!initParam) {
+                    this.isInsert = true;
+                    this.editTitle='新增';
+                } else {
+                    this.isInsert = false;
+                    this.editTitle='编辑';
+                }
+                setTimeout(() => this.edit${entity}Form.setFieldsValue(initParam), 0);
+            },
+            close${entity}Edit() {
+                this.editDialogVisible = false;
+                this.edit${entity}Form.resetFields();
+            },
+            submitForm() {
+                this.edit${entity}Form.validateFields(async (err, values) => {
+                    if (!err) {
+                        console.log(this.isInsert)
+                        if (this.isInsert) {
+                            this.insert${entity}(values);
+                        } else {
+                            this.update${entity}(values);
+                        }
+                    }
+                });
+            }
+        },
+    }
+</script>
+<style scoped>
+    .ruleTemplate {
+        background: #fff;
+        margin: auto;
+        margin-bottom: 50px;
+        width: 100%;
+        height:100%;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    }
+</style>

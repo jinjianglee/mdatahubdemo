@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dh.datahub.mapper.SosOrderMapper">
+    <select id="getSosOrder" resultType="com.dh.datahub.entity.SosOrder">
+        select * from
+        sos_order
+        where 1=1
+        limit #{current},#{pageSize}
+    </select>
+    <select id="getSosOrderCount" resultType="int">
+        select count(1) from
+        sos_order
+        where 1=1
+    </select>
+    <select id="getSosOrderByDateAndShop" resultType="com.dh.datahub.entity.SosOrder">
+        SELECT
+            *
+        FROM
+            sos_order
+        WHERE
+            TURNOVER_TIME BETWEEN #{startDate}
+        AND #{endDate}
+        AND SHOP_ID = #{shopId}
+    </select>
+</mapper>

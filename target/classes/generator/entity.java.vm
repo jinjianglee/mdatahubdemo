@@ -1,0 +1,68 @@
+package ${package.Entity};
+
+import com.google.gson.Gson;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+#if(${swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+
+/**
+ * $!{table.comment} Entity
+ *
+ * @author: ${author}
+ * @Date: ${date}
+ */
+#if(${table.convert})
+@TableName("${table.name}")
+#end
+#if(${swagger2})
+@ApiModel(value="${entity}对象", description="$!{table.comment}")
+#end
+public class ${entity} extends Model<${entity}> implements Serializable {
+
+#if(${entitySerialVersionUID})
+    private static final long serialVersionUID = 1L;
+#end
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+    #if("$!field.comment" != "")
+        #if(${swagger2})
+    @ApiModelProperty(value = "${field.comment}")
+        #else
+    /**
+     * ${field.comment}
+     */
+        #end
+    #end
+    #if(${field.keyFlag})
+    @TableId
+    #end
+    protected ${field.propertyType} ${field.propertyName};
+#end
+## ----------  END 字段循环遍历  ----------
+
+#foreach($field in ${table.fields})
+
+    public ${field.propertyType} get${field.customMap.fnName}() {
+        return this.${field.propertyName};
+    }
+
+    public void set${field.customMap.fnName}(${field.propertyType} ${field.propertyName}) {
+        this.${field.propertyName} = ${field.propertyName};
+    }
+#end
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
+}

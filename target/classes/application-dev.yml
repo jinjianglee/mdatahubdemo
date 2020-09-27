@@ -1,0 +1,74 @@
+#端口号配置
+server:
+  #  port: 9092
+  servlet:
+    context-path: /
+#logging:
+#  level:
+#    com.lacesar: debug
+#  root: debug
+#  file:
+#    max-size:100MB
+spring:
+  datasource:
+    dynamic:
+      primary: sos
+      druid: #全局druid
+        initial-size: 10
+        max-active: 100
+        min-idle: 10
+        max-wait: 60000
+        min-evictable-idle-time-millis: 300000
+        time-between-eviction-runs-millis: 60000
+        validation-query: select 1 from dual
+        test-on-borrow: false
+        test-on-return: false
+        test-while-idle: true
+        pool-prepared-statements: true
+        filters: stat,wall
+        # max-open-prepared-statements: 100
+        # max-pool-prepared-statement-per-connection-size 替代 max-open-prepared-statements
+        max-pool-prepared-statement-per-connection-size: 100
+        share-prepared-statements: true
+        connection-properties: druid.stat.mergeSql=true
+        use-global-data-source-stat: false
+        time-between-log-stats-millis: 86400000
+        proxy-filters:
+          - druidWallFilter
+      datasource:
+#        local:
+#          url: jdbc:sqlite:local.db
+#          username:
+#          password:
+#          driver-class-name: org.sqlite.JDBC
+#          druid: #局域druid
+#            filters: stat
+#            validation-query: select 1
+#            max-pool-prepared-statement-per-connection-size: 0
+        sos:
+          url: jdbc:mysql://193.112.153.22:3306/vwork?autoReconnectForPools=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: DBAdmin
+          password: hXlacesarJKbI*3K1DMk
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        sosReadOnly:
+          url: jdbc:mysql://193.112.153.22:3306/vwork?autoReconnectForPools=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: DBAdmin
+          password: hXlacesarJKbI*3K1DMk
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        crmReadOnly:
+          url: jdbc:mysql://193.112.153.22:3306/crm?autoReconnectForPools=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: DBAdmin
+          password: hXlacesarJKbI*3K1DMk
+          driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: nevernow
+  aop:
+    proxy-target-class: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+mybatis-plus:
+  mapper-locations: classpath:mapping/**/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    local-cache-scope: statement

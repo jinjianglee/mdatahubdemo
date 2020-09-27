@@ -1,0 +1,58 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+#if(${cfg.commonPath})
+import ${cfg.commonPath};
+#end
+import ${package.Entity}.${entity};
+import java.util.Map;
+import ${package.Service}.${table.serviceName};
+
+/**
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+@ResponseBody
+#end
+@RequestMapping("#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}")
+public class ${table.controllerName}{
+    /**
+     * log Object
+     */
+    private static Logger log = LoggerFactory.getLogger(${table.controllerName}.class);
+
+    @Autowired
+    ${table.serviceName} service;
+
+    @RequestMapping(value = "/insert${entity}", method = RequestMethod.POST)
+    public BaseResponse insert${entity}(@RequestBody ${entity} data) {
+        return BaseResponse.run(() -> service.save(data));
+    }
+
+    @RequestMapping(value = "/update${entity}", method = RequestMethod.POST)
+    public BaseResponse update${entity}(@RequestBody ${entity} data) {
+        return BaseResponse.run(() -> service.updateById(data));
+    }
+
+    @RequestMapping(value = "/delete${entity}", method = RequestMethod.GET)
+    public BaseResponse delete${entity}(String id) {
+        return BaseResponse.run(() -> service.removeById(id));
+    }
+
+    @RequestMapping(value = "/get${entity}", method = RequestMethod.POST)
+    public BaseResponse list${entity}(@RequestBody Map param, Page page) {
+        return BaseResponse.run(() -> service.get${entity}(param, page));
+    }
+}

@@ -1,0 +1,43 @@
+package ${package.ServiceImpl};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * $!{table.comment} Service Implements
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+    /**
+     * log Object
+     */
+    private static Logger log = LoggerFactory.getLogger(${table.serviceImplName}.class);
+
+    @Override
+    public Page<${entity}> get${entity}(Map param, Page page) {
+        param.put("current", (page.getCurrent() - 1) * page.getSize());
+        param.put("pageSize", page.getSize());
+        page.setRecords(baseMapper.get${entity}(param));
+        page.setTotal(baseMapper.get${entity}Count(param));
+        page.setPages((page.getTotal() / page.getSize()) - 1);
+        return page;
+    }
+}
+#end

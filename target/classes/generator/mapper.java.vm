@@ -1,0 +1,20 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import ${superMapperClassPackage};
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * $!{table.comment} Mybatis Mapper
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+
+    List<${entity}> get${entity}(Map map);
+
+    int get${entity}Count(Map map);
+}

@@ -1,0 +1,170 @@
+<template>
+    <div class="ruleTemplate" v-loading.fullscreen.lock="fullscreenLoading">
+        <div style="width: 100%;" align="center">
+            <el-button type="success" v-on:click="openEdit(true,null)">新增</el-button>
+            <el-input style="width: 35%;" type="default" v-model="queryParam.tag" :placeholder="'请输入'+PK+'查询'"/>
+            <el-button type="primary" v-on:click="getList(queryParam)">查询</el-button>
+        </div>
+        <el-table :data="tableData" align="center">
+            <el-table-column v-bind:key="row.prop" v-for="row in tableRow" :prop="row.prop" :label="row.label"
+                             :width="row.width" :show-overflow-tooltip="true" :fixed="row.fixed">
+                <template slot-scope="scope">
+                    <el-link type="primary" v-if="row.showBox"
+                             v-on:click="showMsgBox(scope.row[row.prop],row.label,row.showBox)">
+                        {{scope.row[row.prop]}}
+                    </el-link>
+                    <span v-if="!row.showBox">{{scope.row[row.prop]}}</span>
+                    <div v-if="row.prop=='option'">
+                        <el-button size="mini" type="primary" v-on:click="openEdit(false,scope.row)">修改</el-button>
+                        <el-button size="mini" type="danger" v-on:click="delete${entity}(scope.row[PK])">删除
+                        </el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-dialog :title="isInsert?'新增':'修改'" :visible.sync="edit${entity}DialogVisible" :closeOnClickModal="false">
+            <el-form :model="edit${entity}Form" label-position="right" label-width="80px" :rules="edit${entity}Rules" ref="edit${entity}Form">
+                <el-form-item :label="prop" :prop="prop" v-for="prop in Object.keys(edit${entity}Form)">
+                    <el-input type="default" :placeholder="edit${entity}Form[prop]"
+                              v-model="edit${entity}Form[prop]"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="submit_btn" type="primary" @click="isInsert?insert${entity}():update${entity}()">
+                    {{isInsert?'新增':'修改'}}
+                </el-button>
+                <el-button class="submit_btn" @click="closeEditDialog()">取 消</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</template>
+<script>
+    import axios from 'axios';
+    import _ from 'lodash-es';
+
+    export default {
+        props: [],
+        data() {
+            return {
+                fullscreenLoading: false,
+                isInsert: false,
+                edit${entity}DialogVisible: false,
+                edit${entity}Visible: false,
+                queryParam: {},
+                PK:#foreach($field in ${table.fields}) #if(${field.keyFlag})"${field.propertyName}",#end#end
+                edit${entity}Rules:{
+                },
+                edit${entity}Form: {
+                    #foreach($field in ${table.fields})
+                        "${field.propertyName}":"",
+                    #end
+                },
+                baseEdit${entity}Form: {
+                    #foreach($field in ${table.fields})
+                        "${field.propertyName}":"",
+                    #end
+                },
+                tableRow: [
+                    #foreach($field in ${table.fields})
+                        {prop: "${field.propertyName}",label: "#if("$!field.comment" != "")${field.comment}#else${field.propertyName}#end",width: 150},
+                    #end
+                    {prop: "option", label: "操作", width: 150, fixed: "right"}
+                ],
+                isEdit: false,
+                tableData: [],
+                host:"http://localhost:9092",
+                api: {
+                    getList: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/get${entity}",
+                    delete: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/delete${entity}",
+                    update: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/update${entity}",
+                    insert: "#if(${cfg.requestMapping})/${cfg.requestMapping}#end/api${entity}/insert${entity}",
+                }
+            }
+
+        },
+        mounted() {
+            this.getList({});
+        },
+        methods: {
+            closeEditDialog() {
+                this.edit${entity}DialogVisible = false;
+                this.edit${entity}Form = _.cloneDeep(this.baseEdit${entity}Form);
+            },
+            openEdit(isInsert, param) {
+                this.isInsert = isInsert;
+                if (!isInsert) {
+                    this.edit${entity}Form = _.cloneDeep(param);
+                }
+                this.edit${entity}DialogVisible = true;
+            },
+            getList(param){
+                for (var key in param) {
+                    if (_.isEmpty(param[key])) {
+                        param = {};
+                        break;
+                    }
+                }
+                axios.post(this.host + this.api.getList,param).then(result => {
+                    this.tableData = result.data.result;
+                });
+            },
+            insert${entity}(){
+                axios.post(this.host + this.api.insert, this.edit${entity}Form).then(result => {
+                    console.log(result.data);
+                    this.$message({
+                        type: 'success',
+                        message: '新增成功!'
+                    });
+                    this.getList({});
+                    this.closeEditDialog();
+                });
+            },
+            update${entity}(){
+                axios.post(this.host + this.api.update, this.edit${entity}Form).then(result => {
+                    console.log(result.data);
+                    if (result.data.result == true) {
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
+                        this.getList({});
+                    }
+                    this.closeEditDialog();
+                });
+            },
+            delete${entity}(param){
+                this.$confirm('此操作将删除该条目, 是否继续?', '提示', {
+                    cancelButtonText: '取消',
+                    confirmButtonText: '确定',
+                    type: 'warning'
+                }).then(() => {
+                    axios.get(this.host + this.api.delete+"?id="+param).then(result => {
+                        console.log(result.data);
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        if (result.data.result) {
+                            this.getList({});
+                        }
+                    });
+                }).catch(() => {
+                });
+            },
+            showMsgBox(val, title, showBox) {
+                if (showBox) {
+                    this.$alert(val, title, {
+                        confirmButtonText: '确定'
+                    });
+                }
+            }
+        },
+    }
+</script>
+<style scoped>
+    .ruleTemplate {
+        margin: auto;
+        margin-top: 50px;
+        width: 80%;
+    }
+</style>
