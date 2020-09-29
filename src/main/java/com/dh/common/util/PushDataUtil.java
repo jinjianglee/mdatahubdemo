@@ -64,7 +64,10 @@ public class PushDataUtil {
     public static void main(String[] args) {
         try{
             Producer<String,String> producer = KafkaUtil.getProducer(null);
-            Future future = producer.send(new ProducerRecord<>("test-topic","testKey","testValue"));
+            for(int i=0;i<10000;i++){
+                Thread.sleep(10);
+                Future future = producer.send(new ProducerRecord<>("test-topic","testKey"+i,"testValue"+i));
+            }
         }catch (Exception e){
             logger.error(e.getMessage());
         }

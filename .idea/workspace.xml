@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36bb6efc-6f06-4481-9105-b3160d9fdcdb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kafka/KafkaUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kafka/IConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dh/MdatahubDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dh/MdatahubDemo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/dh/common/util/PushDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dh/common/util/PushDataUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kafka/KafkaUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kafka/KafkaUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/dh/MdatahubDemo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dh/MdatahubDemo.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/dh/common/util/PushDataUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dh/common/util/PushDataUtil.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -85,6 +85,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="IConsumer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kafka.IConsumer" />
+      <module name="mdatahubdemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kafka.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MdatahubDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.dh.MdatahubDemo" />
       <module name="mdatahubdemo" />
@@ -155,10 +168,12 @@
       <item itemvalue="Docker.mdatahub" />
       <item itemvalue="Spring Boot.MdataHubApplication" />
       <item itemvalue="Application.PushDataUtil" />
+      <item itemvalue="Application.IConsumer" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.PushDataUtil" />
+        <item itemvalue="Application.IConsumer" />
         <item itemvalue="Application.MdatahubDemo" />
         <item itemvalue="Application.CodeGenerator" />
       </list>
@@ -190,8 +205,16 @@
       <workItem from="1599901346733" duration="1220000" />
       <workItem from="1600049642596" duration="590000" />
       <workItem from="1600218230366" duration="7705000" />
-      <workItem from="1600909319264" duration="18595000" />
+      <workItem from="1600909319264" duration="25641000" />
     </task>
+    <task id="LOCAL-00001" summary="调整文件位置">
+      <created>1601265066024</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1601265066024</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,5 +230,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="sasdad" />
+    <MESSAGE value="调整文件位置" />
+    <option name="LAST_COMMIT_MESSAGE" value="调整文件位置" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/mdatahubdemo$IConsumer.ic" NAME="IConsumer Coverage Results" MODIFIED="1601284460006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.kafka.*</FILTER>
+    </SUITE>
   </component>
 </project>

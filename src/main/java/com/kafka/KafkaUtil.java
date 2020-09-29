@@ -124,7 +124,7 @@ public class KafkaUtil {
         Properties defaultProperties = new Properties();
         boolean flag = null == properties || properties.isEmpty();
         if (flag){
-            defaultProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"81.71.64.120:9094");
+            defaultProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"81.71.64.120:9092");
             defaultProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             defaultProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class);
             defaultProperties.put(ProducerConfig.ACKS_CONFIG, "all");
