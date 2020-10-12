@@ -23,8 +23,8 @@ import java.util.concurrent.Future;
 @Component
 public class PushDataUtil {
     private static String DATAHUB_ENDPOINT="http://dh-cn-hangzhou.aliyuncs.com";
-    private static String ACCESS_ID="LTAI4G6TkVfPGVPsMTRr5kNm";
-    private static String ACCESS_KEY="Ass9BNVchd2ZxveDqBsOkYjZW29bax";
+    private static String ACCESS_ID="";
+    private static String ACCESS_KEY="";
     public ISosOrderService sosOrderService;
     private final static Logger logger= Logger.getLogger(PushDataUtil.class);
     @Scheduled(cron = "*/30 * * * * ?")

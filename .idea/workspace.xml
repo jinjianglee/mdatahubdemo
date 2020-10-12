@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36bb6efc-6f06-4481-9105-b3160d9fdcdb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kafka/IConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dh/common/util/PushDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dh/common/util/PushDataUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kafka/KafkaUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kafka/KafkaUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/dh/MdatahubDemo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dh/MdatahubDemo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/dh/common/util/PushDataUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dh/common/util/PushDataUtil.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -205,7 +200,7 @@
       <workItem from="1599901346733" duration="1220000" />
       <workItem from="1600049642596" duration="590000" />
       <workItem from="1600218230366" duration="7705000" />
-      <workItem from="1600909319264" duration="25641000" />
+      <workItem from="1600909319264" duration="29458000" />
     </task>
     <task id="LOCAL-00001" summary="调整文件位置">
       <created>1601265066024</created>
@@ -214,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601265066024</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="添加Kafka消费者">
+      <created>1601344924086</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1601344924086</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,7 +236,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sasdad" />
     <MESSAGE value="调整文件位置" />
-    <option name="LAST_COMMIT_MESSAGE" value="调整文件位置" />
+    <MESSAGE value="添加Kafka消费者" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加Kafka消费者" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/mdatahubdemo$IConsumer.ic" NAME="IConsumer Coverage Results" MODIFIED="1601284460006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
